@@ -1,5 +1,6 @@
 langchain==0.2.10
 langchain-community==0.2.9
+tavily-python==0.3.4
 langchain-core==0.2.22
 langchain-anthropic==0.1.20
 langchain-text-splitters==0.2.2
