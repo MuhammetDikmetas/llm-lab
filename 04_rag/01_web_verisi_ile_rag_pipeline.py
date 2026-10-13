@@ -1,11 +1,11 @@
 import bs4
 from dotenv import load_dotenv
-from langchain import hub
 from langchain_anthropic import ChatAnthropic
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -55,7 +55,19 @@ vectorstore = Chroma.from_documents(
 retriever = vectorstore.as_retriever()
 
 
-prompt = hub.pull("rlm/rag-prompt")
+
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "human",
+            "You are an assistant for question-answering tasks. "
+            "Use the following pieces of retrieved context to answer the question. "
+            "If you don't know the answer, just say that you don't know. "
+            "Use three sentences maximum and keep the answer concise.\n"
+            "Question: {question} \nContext: {context} \nAnswer:",
+        )
+    ]
+)
 
 
 def format_docs(docs):
